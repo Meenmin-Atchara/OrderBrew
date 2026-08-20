@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
-import { ShoppingCart, Trash2, Coffee, CheckCircle2, Plus, Minus, MessageSquare } from 'lucide-react';
+import { ShoppingCart, Trash2, Coffee, CheckCircle2, Plus, Minus, MessageSquare, User } from 'lucide-react';
 
 interface Menu {
   id: string;
@@ -37,6 +37,7 @@ export default function Home() {
   const [sweetness, setSweetness] = useState('100%');
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [note, setNote] = useState('');
+  const [customerName, setCustomerName] = useState(''); // เก็บชื่อลูกค้า
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [loadingQr, setLoadingQr] = useState(false);
 
@@ -89,6 +90,10 @@ export default function Home() {
   const handleGenerateQR = async () => {
     const total = getTotalPrice();
     if (total <= 0) return;
+    if (!customerName.trim()) {
+      alert('กรุณากรอกชื่อลูกค้าก่อนชำระเงินครับ');
+      return;
+    }
 
     setLoadingQr(true);
     try {
@@ -160,16 +165,32 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100 h-fit">
-          <div className="flex items-center gap-2 mb-4 border-b pb-3">
+        {/* ตะกร้าสินค้า */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100 h-fit space-y-4">
+          <div className="flex items-center gap-2 border-b pb-3">
             <ShoppingCart className="w-5 h-5 text-amber-600" />
             <h2 className="text-lg font-bold">ตะกร้าของคุณ</h2>
+          </div>
+
+          {/* ช่องกรอกชื่อลูกค้า */}
+          <div>
+            <label className="text-xs font-bold text-gray-600 block mb-1">ชื่อผู้สั่ง / ชื่อลูกค้า *</label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="เช่น คุณเมย์ / คุณเอ..."
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                className="w-full text-sm border rounded-xl p-2.5 pl-8 focus:outline-none focus:ring-1 focus:ring-amber-500 bg-amber-50/30"
+              />
+              <User className="w-4 h-4 text-gray-400 absolute left-2.5 top-3" />
+            </div>
           </div>
 
           {items.length === 0 ? (
             <p className="text-gray-400 text-center py-8">ยังไม่มีรายการในตะกร้า</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 pt-2">
               {items.map((item) => (
                 <div key={item.id} className="border-b pb-3 text-sm space-y-2">
                   <div className="flex justify-between items-start">
@@ -313,6 +334,9 @@ export default function Home() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
             <h3 className="font-bold text-lg">สแกนเพื่อชำระเงิน</h3>
+            <div className="bg-amber-50 p-2 rounded-xl text-xs text-amber-800 font-semibold">
+              ชื่อผู้สั่ง: {customerName}
+            </div>
             <div className="bg-white p-2 inline-block border rounded-xl shadow-inner">
               <img src={qrCode} alt="PromptPay QR Code" className="w-48 h-48 mx-auto" />
             </div>
@@ -321,6 +345,7 @@ export default function Home() {
             <button
               onClick={() => {
                 setQrCode(null);
+                setCustomerName('');
                 clearCart();
                 alert('ชำระเงินสำเร็จ! ขอบคุณครับ');
               }}
