@@ -29,7 +29,7 @@ const TOPPINGS = [
   { name: 'วิปครีม', price: 15 },
 ];
 
-export default function Home() {
+export default function KitchenPage() {
   const { items, addToCart, removeFromCart, clearCart, getTotalPrice } = useCartStore();
 
   const [selectedCategory, setSelectedCategory] = useState('ทั้งหมด');
