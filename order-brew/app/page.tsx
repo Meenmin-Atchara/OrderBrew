@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import { ShoppingCart, Trash2, Coffee, CheckCircle2, Plus, Minus, MessageSquare } from 'lucide-react';
 
@@ -39,7 +40,6 @@ export default function Home() {
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [loadingQr, setLoadingQr] = useState(false);
 
-  // กรองเมนูตามหมวดหมู่
   const filteredMenu = selectedCategory === 'ทั้งหมด'
     ? MENU_ITEMS
     : MENU_ITEMS.filter((item) => item.category === selectedCategory);
@@ -115,16 +115,20 @@ export default function Home() {
           <Coffee className="w-8 h-8 text-amber-600" />
           <h1 className="text-2xl font-bold text-amber-900">OrderBrew</h1>
         </div>
+        <Link
+          href="/kitchen"
+          className="text-xs font-bold text-amber-700 bg-amber-100/60 hover:bg-amber-100 px-3 py-2 rounded-xl transition"
+        >
+          ⚙️ หลังบ้าน (Kitchen)
+        </Link>
       </header>
 
       <main className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* รายการเมนู & Tab กรอง */}
         <div className="md:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">เลือกเครื่องดื่ม</h2>
           </div>
 
-          {/* Category Tabs */}
           <div className="flex gap-2 overflow-x-auto pb-2">
             {CATEGORIES.map((cat) => (
               <button
@@ -141,7 +145,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Menu Cards Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {filteredMenu.map((item) => (
               <div
@@ -157,7 +160,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ตะกร้าสินค้า */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100 h-fit">
           <div className="flex items-center gap-2 mb-4 border-b pb-3">
             <ShoppingCart className="w-5 h-5 text-amber-600" />
@@ -189,7 +191,6 @@ export default function Home() {
                   <div className="flex justify-between items-center pt-1">
                     <span className="text-amber-600 font-bold">{item.price * item.quantity} ฿</span>
                     
-                    {/* ปุ่มเพิ่ม/ลด จำนวน */}
                     <div className="flex items-center gap-2 bg-amber-50 rounded-lg p-1 border border-amber-100">
                       <button
                         onClick={() => handleUpdateQuantity(item, -1)}
@@ -226,7 +227,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Modal เลือกระดับความหวาน + ท็อปปิ้ง + หมายเหตุ */}
       {selectedMenu && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-xl">
@@ -309,7 +309,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Modal QR Code */}
       {qrCode && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
