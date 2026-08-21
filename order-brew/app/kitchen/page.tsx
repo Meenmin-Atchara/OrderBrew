@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';git add .
+import Link from 'next/link';
 import { Coffee, Clock, CheckCircle2, ShoppingBag, ArrowLeft, Calendar, BarChart3, User, RefreshCw } from 'lucide-react';
 
 interface OrderItem {
