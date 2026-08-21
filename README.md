@@ -1,42 +1,36 @@
-# ☕ OrderBrew - ระบบรับออเดอร์และจัดการคิวร้านเครื่องดื่ม (POS & Kitchen Management System)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**OrderBrew** คือเว็บแอปพลิเคชันจัดการออเดอร์เครื่องดื่ม ออกแบบมาสำหรับร้านกาแฟและคาเฟ่ ช่วยให้การรับออเดอร์หน้าร้าน การจัดคิวในครัว และการสรุปยอดขายทำได้อย่างรวดเร็ว แม่นยำ และเป็นระบบ
+## Getting Started
 
----
+First, run the development server:
 
-## ✨ ฟีเจอร์หลัก (Key Features)
-
-### 🛒 หน้าร้าน / POS (Customer Order)
-- **เลือกปรับแต่งเครื่องดื่ม:** เลือกเลเวลความหวาน (100%, 75%, 50%, 25%, 0%) และเพิ่มท็อปปิ้ง (ไข่มุก, พุดดิ้ง, วิปครีม) ผ่าน Pop-up Modal
-- **ตะกร้าสินค้าอัจฉริยะ:** ปรับเพิ่ม-ลดจำนวนสินค้า ระบบรวมรายการเครื่องดื่มที่ตัวเลือกเหมือนกันให้อัตโนมัติ
-- **ระบบระบุตัวตนผู้สั่ง:** บังคับระบุชื่อผู้สั่ง/ลูกค้าเพื่อป้องกันการสลับออเดอร์
-- **ชำระเงินผ่าน QR Code:** แสดง Pop-up สแกน QR Code PromptPay คำนวณราคารวมให้อัตโนมัติ
-
-### 👨‍🍳 หลังบ้าน / ห้องครัว (Kitchen Queue)
-- **จัดการคิวออเดอร์ Real-time:** แสดงรายการออเดอร์ที่สั่งเข้ามาทันที พร้อมสถานะ (รอดำเนินการ / เสร็จสิ้น)
-- **ปรับเปลี่ยนสถานะได้ง่าย:** กดอัปเดตสถานะออเดอร์ได้ด้วยคลิกเดียว
-
-### 📊 สรุปยอดขาย & วิเคราะห์ข้อมูล (Sales Analytics)
-- **รายงานยอดขาย:** สรุปยอดขายรวม จำนวนออเดอร์ และเมนูขายดีประจำวัน
-- **ส่งออกข้อมูล:** รองรับการ Export ข้อมูลออเดอร์เป็นไฟล์ CSV นำไปใช้วิเคราะห์ต่อใน Excel หรือ Google Sheets ได้ทันที
-
----
-
-## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
-
-- **Framework:** [Next.js](https://nextjs.org/) (React Framework)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **State & Data Persistence:** LocalStorage & Cross-Tab Custom Events (รับ-ส่งข้อมูล Real-time ระหว่างหน้า POS และ Kitchen)
-- **Language:** TypeScript
-
----
-## 🚀 วิธีการติดตั้งและใช้งาน (Getting Started)
-
-### ติดตั้ง Dependencies
-npm install
-
-### รัน Development Server
+```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-เปิดเบราว์เซอร์ไปที่ http://localhost:3000 เพื่อเริ่มใช้งาน 🎈
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
