@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Coffee, Clock, CheckCircle2, ShoppingBag, ArrowLeft, Calendar, BarChart3, User } from 'lucide-react';
+import Link from 'next/link';git add .
+import { Coffee, Clock, CheckCircle2, ShoppingBag, ArrowLeft, Calendar, BarChart3, User, RefreshCw } from 'lucide-react';
 
 interface OrderItem {
   name: string;
@@ -15,7 +15,7 @@ interface OrderItem {
 interface Order {
   id: string;
   customerName: string;
-  date: string; // YYYY-MM-DD
+  date: string;
   time: string;
   items: OrderItem[];
   total: number;
@@ -39,40 +39,26 @@ export default function KitchenPage() {
       now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })
     );
 
-    // ดึงข้อมูลออเดอร์ทั้งหมดจาก LocalStorage
-    const savedOrders = localStorage.getItem('orderbrew_orders');
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders));
-    } else {
-      // Mock Data ตั้งต้นสำหรับทดสอบระบบ
-      const initialOrders: Order[] = [
-        {
-          id: 'ORD-001',
-          customerName: 'คุณเมย์',
-          date: today,
-          time: '14:20',
-          total: 115,
-          status: 'pending',
-          items: [
-            { name: 'ชาไทยเย็น', sweetness: '50%', toppings: ['ไข่มุก'], quantity: 1, price: 55 },
-            { name: 'ชาเขียวเย็น', sweetness: '50%', toppings: ['วิปครีม'], quantity: 1, price: 60 },
-          ],
-        },
-        {
-          id: 'ORD-002',
-          customerName: 'คุณเอ',
-          date: today,
-          time: '14:22',
-          total: 50,
-          status: 'preparing',
-          items: [
-            { name: 'เอสเพรสโซ่เย็น', sweetness: '100%', toppings: [], quantity: 1, price: 50 },
-          ],
-        },
-      ];
-      setOrders(initialOrders);
-      localStorage.setItem('orderbrew_orders', JSON.stringify(initialOrders));
-    }
+    // ฟังก์ชันดึงออเดอร์ล่าสุด
+    const loadOrders = () => {
+      const savedOrders = localStorage.getItem('orderbrew_orders');
+      if (savedOrders) {
+        setOrders(JSON.parse(savedOrders));
+      } else {
+        setOrders([]);
+      }
+    };
+
+    loadOrders();
+
+    // ฟัง Event เมื่อมีการบันทึกออเดอร์ใหม่จากหน้าร้าน
+    window.addEventListener('storage', loadOrders);
+    window.addEventListener('focus', loadOrders);
+
+    return () => {
+      window.removeEventListener('storage', loadOrders);
+      window.removeEventListener('focus', loadOrders);
+    };
   }, []);
 
   const updateStatus = (orderId: string, nextStatus: Order['status']) => {
@@ -83,7 +69,15 @@ export default function KitchenPage() {
     localStorage.setItem('orderbrew_orders', JSON.stringify(updated));
   };
 
-  // กรองแสดงเฉพาะออเดอร์ของวันนี้
+  const handleResetToday = () => {
+    if (confirm('คุณต้องการล้างคิวเฉพาะของวันนี้หรือไม่?')) {
+      const remaining = orders.filter((o) => o.date !== todayStr);
+      setOrders(remaining);
+      localStorage.setItem('orderbrew_orders', JSON.stringify(remaining));
+    }
+  };
+
+  // กรองเฉพาะออเดอร์ของวันนี้
   const todayOrders = orders.filter((o) => o.date === todayStr);
 
   return (
@@ -104,6 +98,15 @@ export default function KitchenPage() {
             <Calendar className="w-4 h-4 text-amber-600" />
             <span>{formattedDate || 'กำลังโหลด...'}</span>
           </div>
+
+          <button
+            onClick={handleResetToday}
+            className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-red-600 bg-gray-50 hover:bg-red-50 px-3 py-2 rounded-xl transition border border-gray-200"
+            title="ล้างคิวของวันนี้"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            รีเซ็ตคิววัน
+          </button>
 
           <Link
             href="/sales"
@@ -135,37 +138,45 @@ export default function KitchenPage() {
             </span>
           </div>
 
-          {todayOrders.filter((o) => o.status === 'pending').map((order) => (
-            <div key={order.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
-              <div className="flex justify-between items-center border-b pb-2">
-                <div>
-                  <span className="font-bold text-gray-800 mr-2">{order.id}</span>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold bg-amber-50 text-amber-800 px-2 py-0.5 rounded-md border border-amber-200">
-                    <User className="w-3 h-3" /> {order.customerName}
-                  </span>
-                </div>
-                <span className="text-xs text-gray-400">{order.time} น.</span>
-              </div>
-
-              <div className="space-y-2">
-                {order.items.map((item, idx) => (
-                  <div key={idx} className="text-sm">
-                    <div className="font-semibold text-gray-800">{item.name} x {item.quantity}</div>
-                    <div className="text-xs text-gray-500">
-                      หวาน {item.sweetness} {item.toppings.length > 0 && `+ ${item.toppings.join(', ')}`}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => updateStatus(order.id, 'preparing')}
-                className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-sm transition"
-              >
-                เริ่มชงเครื่องดื่ม
-              </button>
+          {todayOrders.filter((o) => o.status === 'pending').length === 0 ? (
+            <div className="bg-white/50 p-6 rounded-xl border border-dashed text-center text-xs text-gray-400">
+              ไม่มีออเดอร์รอชง
             </div>
-          ))}
+          ) : (
+            todayOrders
+              .filter((o) => o.status === 'pending')
+              .map((order) => (
+                <div key={order.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <div>
+                      <span className="font-bold text-gray-800 mr-2">{order.id}</span>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold bg-amber-50 text-amber-800 px-2 py-0.5 rounded-md border border-amber-200">
+                        <User className="w-3 h-3" /> {order.customerName}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-400">{order.time} น.</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {order.items.map((item, idx) => (
+                      <div key={idx} className="text-sm">
+                        <div className="font-semibold text-gray-800">{item.name} x {item.quantity}</div>
+                        <div className="text-xs text-gray-500">
+                          หวาน {item.sweetness} {item.toppings.length > 0 && `+ ${item.toppings.join(', ')}`}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => updateStatus(order.id, 'preparing')}
+                    className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-sm transition"
+                  >
+                    เริ่มชงเครื่องดื่ม
+                  </button>
+                </div>
+              ))
+          )}
         </div>
 
         {/* กำลังชง */}
@@ -179,37 +190,45 @@ export default function KitchenPage() {
             </span>
           </div>
 
-          {todayOrders.filter((o) => o.status === 'preparing').map((order) => (
-            <div key={order.id} className="bg-white p-4 rounded-xl shadow-sm border border-blue-200 space-y-3">
-              <div className="flex justify-between items-center border-b pb-2">
-                <div>
-                  <span className="font-bold text-gray-800 mr-2">{order.id}</span>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-800 px-2 py-0.5 rounded-md border border-blue-200">
-                    <User className="w-3 h-3" /> {order.customerName}
-                  </span>
-                </div>
-                <span className="text-xs text-gray-400">{order.time} น.</span>
-              </div>
-
-              <div className="space-y-2">
-                {order.items.map((item, idx) => (
-                  <div key={idx} className="text-sm">
-                    <div className="font-semibold text-gray-800">{item.name} x {item.quantity}</div>
-                    <div className="text-xs text-gray-500">
-                      หวาน {item.sweetness} {item.toppings.length > 0 && `+ ${item.toppings.join(', ')}`}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => updateStatus(order.id, 'completed')}
-                className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm transition"
-              >
-                ชงเสร็จแล้ว (พร้อมเสิร์ฟ)
-              </button>
+          {todayOrders.filter((o) => o.status === 'preparing').length === 0 ? (
+            <div className="bg-white/50 p-6 rounded-xl border border-dashed text-center text-xs text-gray-400">
+              ไม่มีออเดอร์กำลังชง
             </div>
-          ))}
+          ) : (
+            todayOrders
+              .filter((o) => o.status === 'preparing')
+              .map((order) => (
+                <div key={order.id} className="bg-white p-4 rounded-xl shadow-sm border border-blue-200 space-y-3">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <div>
+                      <span className="font-bold text-gray-800 mr-2">{order.id}</span>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold bg-blue-50 text-blue-800 px-2 py-0.5 rounded-md border border-blue-200">
+                        <User className="w-3 h-3" /> {order.customerName}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-400">{order.time} น.</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {order.items.map((item, idx) => (
+                      <div key={idx} className="text-sm">
+                        <div className="font-semibold text-gray-800">{item.name} x {item.quantity}</div>
+                        <div className="text-xs text-gray-500">
+                          หวาน {item.sweetness} {item.toppings.length > 0 && `+ ${item.toppings.join(', ')}`}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => updateStatus(order.id, 'completed')}
+                    className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm transition"
+                  >
+                    ชงเสร็จแล้ว (พร้อมเสิร์ฟ)
+                  </button>
+                </div>
+              ))
+          )}
         </div>
 
         {/* เสร็จสิ้น */}
@@ -223,17 +242,25 @@ export default function KitchenPage() {
             </span>
           </div>
 
-          {todayOrders.filter((o) => o.status === 'completed').map((order) => (
-            <div key={order.id} className="bg-white p-4 rounded-xl border border-emerald-200 space-y-2">
-              <div className="flex justify-between items-center border-b pb-2">
-                <span className="font-bold text-gray-700">{order.id}</span>
-                <span className="text-xs text-emerald-600 font-semibold">เสิร์ฟแล้ว</span>
-              </div>
-              <div className="text-xs text-gray-500">
-                {order.items.map((i) => `${i.name} x${i.quantity}`).join(', ')}
-              </div>
+          {todayOrders.filter((o) => o.status === 'completed').length === 0 ? (
+            <div className="bg-white/50 p-6 rounded-xl border border-dashed text-center text-xs text-gray-400">
+              ยังไม่มีออเดอร์ที่เสร็จสิ้น
             </div>
-          ))}
+          ) : (
+            todayOrders
+              .filter((o) => o.status === 'completed')
+              .map((order) => (
+                <div key={order.id} className="bg-white p-4 rounded-xl border border-emerald-200 space-y-2">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <span className="font-bold text-gray-700">{order.id}</span>
+                    <span className="text-xs text-emerald-600 font-semibold">เสิร์ฟแล้ว</span>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {order.items.map((i) => `${i.name} x${i.quantity}`).join(', ')}
+                  </div>
+                </div>
+              ))
+          )}
         </div>
       </main>
     </div>
