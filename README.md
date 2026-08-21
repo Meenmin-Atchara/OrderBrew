@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ☕ OrderBrew - ระบบรับออเดอร์และจัดการคิวร้านเครื่องดื่ม
+> **POS & Kitchen Management System**
 
-## Getting Started
+OrderBrew คือเว็บแอปพลิเคชันสำหรับบริหารจัดการออเดอร์ร้านเครื่องดื่มและกาแฟ ออกแบบมาเพื่อช่วยให้การรับออเดอร์หน้าร้าน การจัดคิวในครัว และการสรุปยอดขายทำได้อย่างรวดเร็ว แม่นยำ และเป็นระบบ
 
-First, run the development server:
+---
 
-```bash
+## 🚀 ฟีเจอร์หลัก (Key Features)
+
+* **🛒ระบบรับออเดอร์หน้าร้าน (Point of Sale - POS)**
+* เลือกเมนูเครื่องดื่ม ปรับแต่งระดับความหวาน (0% - 100%) และเลือกท็อปปิ้งเพิ่มเติมได้
+* ระบุหมายเหตุเพิ่มเติม (เช่น แยกน้ำแข็ง, หวานน้อยพิเศษ)
+* ปรับเพิ่ม/ลด จำนวนสินค้า และคำนวณราคารวมอัตโนมัติ
+* ระบบตรวจสอบข้อมูล (แจ้งเตือนให้ระบุชื่อลูกค้าก่อนชำระเงิน)
+* รองรับการชำระเงินผ่าน **PromptPay QR Code**
+
+* **👨‍🍳 ระบบจัดการคิวหลังบ้าน (Kitchen Queue Display)**
+* แสดงรายการออเดอร์ที่เข้ามาแบบ Real-time
+* แสดงรายละเอียดการปรับแต่งของแต่ละแก้วอย่างชัดเจน
+* อัปเดตสถานะออเดอร์ (กำลังปรุง /เสร็จสิ้น / ยกเลิก)
+
+* **📊 ระบบสรุปยอดขาย (Sales Dashboard)**
+* รวบรวมประวัติการสั่งซื้อและสรุปรายได้รวม
+* แสดงสถิติและข้อมูลออเดอร์ที่สำเร็จแล้ว
+
+---
+
+## 🛠️เทคโนโลยีที่ใช้ (Tech Stack)
+
+* **Framework:** [Next.js](https://nextjs.org/) (App Router)
+* **Language:** [TypeScript](https://www.typescriptlang.org/)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **Icons:** [Lucide React](https://lucide.dev/)
+* **State & Storage:** React State & `localStorage` (Event Driven)
+
+---
+
+## 📂 โครงสร้างโฟลเดอร์ (Directory Structure)
+
+```text
+order-brew/
+├── app/
+│   ├── api/
+│   │   └── generate-qr/
+│   │       └── route.ts         # Backend API สำหรับสร้าง QR Code ชำระเงิน
+│   ├── kitchen/
+│   │   └── page.tsx             # หน้าจอระบบหลังบ้าน/ห้องครัว (Kitchen Queue)
+│   ├── sales/
+│   │   └── page.tsx             # หน้าจอรายงานยอดขายและสรุปรายได้ (Sales Dashboard)
+│   ├── globals.css              # Global CSS & Tailwind Setup
+│   ├── layout.tsx               # Root Layout หลักของแอปพลิเคชัน
+│   └── page.tsx                 # หน้าหลักรับออเดอร์หน้าร้าน (POS Page)
+├── public/                      # Static Assets (รูปภาพ, Favicon)
+├── package.json                 # Dependencies & Scripts
+├── tsconfig.json                # TypeScript Configuration
+└── README.md                    # เอกสารอธิบายโปรเจกต์
+
+
+## 💻 การติดตั้งและเริ่มใช้งาน (Getting Started)
+
+* **ติดตั้ง Dependencies**
+npm install
+
+* **รันโปรเจกต์ใน Development Mode**
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+เปิดเบราว์เซอร์แล้วเข้าไปที่ http://localhost:3000 เพื่อทดสอบใช้งานระบบ
