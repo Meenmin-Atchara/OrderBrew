@@ -35,27 +35,6 @@ OrderBrew คือเว็บแอปพลิเคชันสำหรั�
 
 ---
 
-## 📂 โครงสร้างโฟลเดอร์ (Directory Structure)
-
-```text
-order-brew/
-├── app/
-│   ├── api/
-│   │   └── generate-qr/
-│   │       └── route.ts         # Backend API สำหรับสร้าง QR Code ชำระเงิน
-│   ├── kitchen/
-│   │   └── page.tsx             # หน้าจอระบบหลังบ้าน/ห้องครัว (Kitchen Queue)
-│   ├── sales/
-│   │   └── page.tsx             # หน้าจอรายงานยอดขายและสรุปรายได้ (Sales Dashboard)
-│   ├── globals.css              # Global CSS & Tailwind Setup
-│   ├── layout.tsx               # Root Layout หลักของแอปพลิเคชัน
-│   └── page.tsx                 # หน้าหลักรับออเดอร์หน้าร้าน (POS Page)
-├── public/                      # Static Assets (รูปภาพ, Favicon)
-├── package.json                 # Dependencies & Scripts
-├── tsconfig.json                # TypeScript Configuration
-└── README.md                    # เอกสารอธิบายโปรเจกต์
-
-
 ## 💻 การติดตั้งและเริ่มใช้งาน (Getting Started)
 
 * **ติดตั้ง Dependencies**
