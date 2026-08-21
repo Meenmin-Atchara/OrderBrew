@@ -35,12 +35,16 @@ OrderBrew คือเว็บแอปพลิเคชันสำหรั�
 
 ---
 
-## 💻 การติดตั้งและเริ่มใช้งาน (Getting Started)
+## 🚀 การติดตั้งและเริ่มใช้งาน (Getting Started)
 
-* **ติดตั้ง Dependencies**
-npm install
+### Installation Steps
 
-* **รันโปรเจกต์ใน Development Mode**
-npm run dev
+1. **Install Dependencies**
+   ```bash
+   npm install
+   
+2. **Run Development Server**
+   ```bash
+   npm run dev
 
 เปิดเบราว์เซอร์แล้วเข้าไปที่ http://localhost:3000 เพื่อทดสอบใช้งานระบบ
